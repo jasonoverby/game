@@ -27,7 +27,7 @@ end
 
 class Play
   def initialize(map)
-    $map = map
+    @map = map
   end
 
   def start
@@ -39,7 +39,7 @@ class Play
     # filler
     # puts "I guess that's cool.  It takes all kinds."
 
-    $map.starting_room
+    @map.go_to_room("bookstore")
   end
 
   def writer
@@ -73,7 +73,6 @@ class BookStore < Room
       action = $stdin.gets.chomp.downcase
       if action.include?("read")
         puts "Your can read?!?"
-        $map.next_room("cafe")
       else
         puts "I don't understand!"
       end
@@ -97,24 +96,24 @@ class Library < Room
 end
 
 class Map
-  def initialize(first_room)
-    @first_room = first_room
-  end
+  # def initialize(first_room)
+  #   @first_room = first_room
+  # end
 
   def rooms
     {"bookstore" => BookStore.new.enter,
      "cafe" => Cafe.new.enter}
   end
 
-  def starting_room
-    rooms.find(@first_room)
-  end
+  # def starting_room
+  #   rooms.find(@first_room)
+  # end
 
-  def next_room(room)
+  def go_to_room(room)
     rooms.find(room)
   end
 end
 
-m = Map.new("bookstore")
+m = Map.new
 p = Play.new(m)
 p.start
