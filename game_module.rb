@@ -71,3 +71,46 @@ module WriterStuff
     @favorite_tool
   end
 end
+
+module Map
+  # def initialize(first_room)
+  #   @first_room = first_room
+  # end
+
+  def rooms
+    {"bookstore" => BookStore.new,
+     "cafe" => Cafe.new, "study" => Study.new, "bathroom" => Bathroom.new}
+  end
+
+  def starting_room
+    BookStore.new.enter
+  end
+
+  def go_to_room(room)
+    rooms[room].enter
+    # Study.new.enter
+  end
+end
+
+# class Test
+#
+#   def initialize
+#     # variable must be included in initialize or def for
+#     # object to have access to it
+#     # & must be an instance variable
+#     # @punctuation = %w(. ! ?)
+#   end
+#
+#   def greeting(name)
+#     # but non-instance variable can be used w/in scope
+#     hello = "HELLLLLLOOOOOOO"
+#
+#
+#     puts " #{name}#{punctuation[rand(0..punctuation.length - 1)]}"
+#     # TRY WITH %s
+#     # puts format("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
+#     # puts sprintf("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
+#     # puts "%s, %s%s" % [test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)]]
+#     puts hello
+#   end
+# end

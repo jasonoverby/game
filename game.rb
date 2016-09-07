@@ -1,34 +1,11 @@
+# add combat module
+
 $LOAD_PATH << '.'
 require "game_module"
 include WriterStuff
-
-class Test
-
-  def initialize
-    # variable must be included in initialize or def for
-    # object to have access to it
-    # & must be an instance variable
-    # @punctuation = %w(. ! ?)
-  end
-
-  def greeting(name)
-    # but non-instance variable can be used w/in scope
-    hello = "HELLLLLLOOOOOOO"
-
-
-    puts " #{name}#{punctuation[rand(0..punctuation.length - 1)]}"
-    # TRY WITH %s
-    # puts format("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
-    # puts sprintf("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
-    # puts "%s, %s%s" % [test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)]]
-    puts hello
-  end
-end
+include Map
 
 class Play
-  def initialize(map)
-    @map = map
-  end
 
   def start
     get_name
@@ -38,8 +15,9 @@ class Play
     # puts "You like to use a #{favorite_tool}?"
     # filler
     # puts "I guess that's cool.  It takes all kinds."
-
-    @map.go_to_room("bookstore")
+    # puts rooms["study"].inspect
+    # @map.go_to_room("study")
+    starting_room
   end
 
   def writer
@@ -73,9 +51,14 @@ class BookStore < Room
       action = $stdin.gets.chomp.downcase
       if action.include?("read")
         puts "Your can read?!?"
+        go_to_room("study")
       else
         puts "I don't understand!"
       end
+    elsif choice == 2
+      go_to_room("cafe")
+    elsif choice == 3
+      go_to_room("bathroom")
     else
       puts "You are dumb!"
     end
@@ -84,36 +67,25 @@ end
 
 class Cafe < Room
   def enter
-    puts "You have entered a pirate-themed café"
+    puts "You have entered a nautical-themed café"
     puts "Ahoy, Matey!"
   end
 end
 
 class Study < Room
+  def enter
+    puts "You drive home and go to your study."
+  end
+end
+
+class Bathroom
+  def enter
+    puts "Time to get down to business."
+  end
 end
 
 class Library < Room
 end
 
-class Map
-  # def initialize(first_room)
-  #   @first_room = first_room
-  # end
-
-  def rooms
-    {"bookstore" => BookStore.new.enter,
-     "cafe" => Cafe.new.enter}
-  end
-
-  # def starting_room
-  #   rooms.find(@first_room)
-  # end
-
-  def go_to_room(room)
-    rooms.find(room)
-  end
-end
-
-m = Map.new
-p = Play.new(m)
+p = Play.new
 p.start
