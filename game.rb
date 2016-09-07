@@ -1,9 +1,12 @@
 # add combat module
+# goal is the collect tools & name favorite book
+# and write something to become a writer
 
 $LOAD_PATH << '.'
 require "game_module"
 include WriterStuff
 include Map
+include Combat
 
 class Play
 
@@ -18,10 +21,6 @@ class Play
     # puts rooms["study"].inspect
     # @map.go_to_room("study")
     starting_room
-  end
-
-  def writer
-    [name, favorite_book, favorite_tool]
   end
 
 end
@@ -74,7 +73,25 @@ end
 
 class Study < Room
   def enter
-    puts "You drive home and go to your study."
+    puts "You are in your house in your study."
+    puts "You have been trying to finish a piece of writing for days,"
+    puts "but you seem to be getting nowhere."
+    # work harder == combat module
+    present_options("Work harder!", "Go to the bathroom.", "Drive to the bookstore.")
+    choice = $stdin.gets.chomp.to_i
+    if choice == 1
+      fight_with_an_idea
+    elsif choice == 2
+      go_to_room("bathroom")
+    elsif choice == 3
+      go_to_room("bookstore")
+    else
+      puts "I don't gettit!"
+    end
+  end
+
+  def write
+    puts "You can't stop writing!"
   end
 end
 

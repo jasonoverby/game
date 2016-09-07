@@ -83,12 +83,34 @@ module Map
   end
 
   def starting_room
-    BookStore.new.enter
+    Study.new.enter
   end
 
   def go_to_room(room)
     rooms[room].enter
-    # Study.new.enter
+  end
+
+  def present_options(one, two, three, four=nil, five=nil, six=nil)
+    puts "What do you do?"
+    puts "1. #{one}"
+    puts "2. #{two}"
+    puts "3. #{three}"
+    puts "4. #{four}" unless four.nil?
+    puts "5. #{five}" unless five.nil?
+    puts "6. #{six}" unless six.nil?
+    print "> "
+  end
+
+end
+
+module Combat
+  include WriterStuff
+  def fight_with_an_idea
+    puts "You begin wrestling with an idea."
+    puts "You need a tool."
+    present_options(tools[0], tools[1], tools[2], tools[3])
+    choice = $stdin.gets.chomp.to_i
+    puts "You have chosen the #{tools[choice-1]}"
   end
 end
 
