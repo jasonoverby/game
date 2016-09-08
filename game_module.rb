@@ -4,6 +4,10 @@ module WriterStuff
     %w(. ! ? ¡ ¿)
   end
 
+  def indefinite_articlerize(word)
+    %w(a e i o u).include?(word[0].downcase) ? "an #{word}" : "a #{word}"
+  end
+
   def filler
     filler_words = %w(Hmmmm Well Er Um Huh Ok)
     puts "#{filler_words[rand(0..filler_words.length - 1)]}..."
@@ -18,6 +22,25 @@ module WriterStuff
     puts "5. #{five}" unless five.nil?
     puts "6. #{six}" unless six.nil?
     print "> "
+  end
+
+  def give_options(array)
+    puts "Select"
+    puts "1. #{array[0].capitalize}"
+    puts "2. #{array[1].capitalize}"
+    puts "3. #{array[2].capitalize}"
+    puts "4. #{array[3].capitalize}" unless array[3].nil?
+    puts "5. #{array[4].capitalize}" unless array[4].nil?
+    puts "6. #{array[5].capitalize}" unless array[5].nil?
+    print "> "
+  end
+
+  def get_choice
+    $stdin.gets.chomp.to_i
+  end
+
+  def get_choice_minus_one
+    get_choice - 1
   end
 
   def get_name
@@ -41,34 +64,22 @@ module WriterStuff
 
   def get_favorite_book
     puts "Whick of these tomes do you like best?"
-    # use present_options
     book_array = []
     books.each do |author, title|
       book_array << "'#{title}' by #{author}"
     end
-    book_array.each_with_index do |book,index|
-      puts "#{index + 1}. #{book}"
-    end
-    print "> "
-    $book = book_array[$stdin.gets.chomp.to_i - 1]
+    present_options(book_array[0], book_array[1], book_array[2], book_array[3], book_array[4], book_array[5])
+    $book = book_array[($stdin.gets.chomp.to_i - 1)]
   end
 
   def tools
-    %w(computer pen pencil notebook)
-  end
-
-  def list_tools
-    tools.each_with_index do |tool,index|
-      # print " "
-      puts "#{index + 1}. #{tool}"
-    end
+    %w(computer pen eraser pencil notebook)
   end
 
   def get_favorite_tool
     puts "Ok, so you call yourself a writer, right?"
     puts "Which of these is your favorite tool?"
-    list_tools
-    print "> "
+    present_options("computer", "pen", "pencil", "notebook")
     $tool = tools[$stdin.gets.chomp.to_i - 1]
   end
 end
@@ -94,10 +105,10 @@ module Combat
   end
 
   def post_battle
-    works = %w(novel story poem pamphlet manual)
+    works = %w(novel story poem pamphlet manual editorial)
     puts "You made it out alive!"
     $work = works[rand(0..works.length - 1)]
-    puts "You have written a #{$work}."
+    puts "You have written #{indefinite_articlerize($work)}."
     present_options("Go to the bookstore", "Go to the bathroom", "Fight again")
     choice = $stdin.gets.chomp.to_i
     if choice == 1
