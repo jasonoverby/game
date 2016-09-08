@@ -1,3 +1,17 @@
+module TheWriter
+
+  def get_name
+    puts "Hello, there!"
+    puts "What is your name?"
+    print "> "
+    the_writer["name"] = $stdin.gets.chomp
+  end
+
+  # def name
+  #   @name
+  # end
+end
+
 module WriterStuff
   def punctuation
     %w(. ! ? ¡ ¿)
@@ -6,17 +20,6 @@ module WriterStuff
   def filler
     filler_words = %w(Hmmmm Well Er Um Huh Ok)
     puts "#{filler_words[rand(0..filler_words.length - 1)]}..."
-  end
-
-  def get_name
-    puts "Hello, there!"
-    puts "What is your name?"
-    print "> "
-    @name = $stdin.gets.chomp
-  end
-
-  def name
-    @name
   end
 
   def book_titles
@@ -73,6 +76,7 @@ module WriterStuff
 end
 
 module Map
+  include TheWriter
   # def initialize(first_room)
   #   @first_room = first_room
   # end
@@ -91,7 +95,7 @@ module Map
   end
 
   def present_options(one, two, three, four=nil, five=nil, six=nil)
-    puts "What do you do?"
+    puts "Select"
     puts "1. #{one}"
     puts "2. #{two}"
     puts "3. #{three}"
@@ -105,12 +109,53 @@ end
 
 module Combat
   include WriterStuff
+  include TheWriter
+
+  # def determine_hit_points
+  #   rand(80..100)
+  # end
+
+  def start_combat
+    @hit_points = rand(80..100)
+    fight_with_an_idea
+  end
+
+  def hp
+    @hit_points
+  end
+
+  def tool
+   @tool
+  end
+
   def fight_with_an_idea
     puts "You begin wrestling with an idea."
     puts "You need a tool."
     present_options(tools[0], tools[1], tools[2], tools[3])
     choice = $stdin.gets.chomp.to_i
-    puts "You have chosen the #{tools[choice-1]}"
+    @tool = tools[choice-1]
+    puts "You have chosen the #{tool}"
+    puts "...but the idea is still there."
+    puts "...and you have #{hp} hit points"
+    present_options("Battle the idea", "Go to the library", "Go to the bookstore")
+    choice = $stdin.gets.chomp.to_i
+    if choice == 1
+      battle
+    elsif choice == 2
+      go_to_room("library")
+    elsif choice == 3
+      go_to_room("bookstore")
+    else
+      puts "You just don't get choices, do you?"
+    end
+
+  end
+
+  def battle
+    puts "Welcome to the battle of your life."
+    idea_hp = rand(30..60)
+    puts "The idea has #{idea_hp} hit points."
+    puts "Your weapon is the #{tool}"
   end
 end
 

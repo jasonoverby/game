@@ -7,12 +7,18 @@ require "game_module"
 include WriterStuff
 include Map
 include Combat
+include TheWriter
 
 class Play
 
+  def the_writer
+    {"name" => nil, "tool" => nil, "favorite_book" => nil}
+  end
+
   def start
     get_name
-    puts "OK, #{name}..."
+    puts the_writer
+    # puts "OK, #{the_writer["name"]}..."
 
     # get_favorite_tool
     # puts "You like to use a #{favorite_tool}?"
@@ -32,6 +38,7 @@ class BookStore < Room
 
   def enter
     puts "You are in a bookstore."
+    puts "You have a #{tool}" unless tool.nil?
     puts "What do you do?"
     puts "1. Look at the shelves"
     puts "2. Get a coffee"
@@ -80,7 +87,7 @@ class Study < Room
     present_options("Work harder!", "Go to the bathroom.", "Drive to the bookstore.")
     choice = $stdin.gets.chomp.to_i
     if choice == 1
-      fight_with_an_idea
+      start_combat
     elsif choice == 2
       go_to_room("bathroom")
     elsif choice == 3
@@ -102,6 +109,9 @@ class Bathroom
 end
 
 class Library < Room
+  def enter
+    puts "You enter the library and see more books than you ever have in your life"
+  end
 end
 
 p = Play.new
