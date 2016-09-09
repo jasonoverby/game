@@ -10,7 +10,7 @@ module WriterStuff
 
   def filler
     filler_words = %w(Hmmmm Well Er Um Huh Ok)
-    puts "#{filler_words[rand(0..filler_words.length - 1)]}..."
+    puts "#{filler_words.sample}..."
   end
 
   def present_options(one, two, three, four=nil, five=nil, six=nil)
