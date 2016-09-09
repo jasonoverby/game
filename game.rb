@@ -1,6 +1,6 @@
 # goal is the collect tool & name & favorite book & coffee & then go to bathroom
 
-# present_options to give_options
+# present_options to present_choices
 # copy-edit (punctuation)
 # clean up
 
@@ -29,32 +29,38 @@ class BookStore
   def enter
     puts "You are in a bookstore."
     puts "You have #{indefinite_articlerize($tool)}." unless $tool.nil?
-    present_options("Look at the shelves", "Get a coffee", "Go to the bathroom")
-    choice = $stdin.gets.chomp.to_i
+    choices = ["Look at the shelves", "Get a coffee", "Go to the bathroom"]
+    present_choices(choices)
+    choice = choose
 
     if choice == 1
       puts "You languidly peruse the particle board stacks."
       puts "Some books on an end cap catch your eye..."
-      get_favorite_book
+      choose_book
       filler
       puts "You like #{$book}?"
       filler
       puts "You put it in your pocket."
       puts "What do you do now?"
       action = $stdin.gets.chomp.downcase
+
       if action.include?("read")
         puts "Your can read?!?"
+        filler
         puts "You drive home."
         go_to_room("study")
       else
         go_to_room("bathroom")
       end
+
     elsif choice == 2
       go_to_room("cafe")
     else
       go_to_room("bathroom")
     end
+
   end
+
 end
 
 class Cafe
@@ -62,18 +68,16 @@ class Cafe
     puts "Ahoy, Matey#{punctuation.sample}"
     puts "You have entered a nautical-themed café."
     puts "Which coffee do you order?"
-    coffees = %w(espresso cappuccino coffee nitro frappuccino)
-    give_options(coffees)
-    choice = $stdin.gets.chomp.to_i - 1
-    # DRY up more - coffee(s)
-    $coffee = coffees[choice]
+    coffees = %w(Espresso Cappuccino Coffee Nitro Frappuccino)
+    present_choices(coffees)
+    $coffee = coffees[choose_minus_one].downcase
     puts "You now have #{indefinite_articlerize($coffee)}!"
-    puts "You are well on your way to being a writer!"
+    filler
+    puts "You are well on your way to being a writer#{punctuation.sample}"
     puts "Now what?"
-    options = ["Go back to the bookstore","Go to your study","Go to the bathroom"]
-    give_options(options)
-    # make a method for this
-    choice = get_choice
+    choices = ["Go back to the bookstore","Go to your study","Go to the bathroom"]
+    present_choices(choices)
+    choice = choose
     if choice == 1
       go_to_room("bookstore")
     elsif choice == 2
@@ -86,12 +90,11 @@ end
 
 class Study
   def enter
-    puts "You are in your house in your study."
+    puts "You are at home in your study."
     puts "You have pocketed #{$book}." unless $book.nil?
-    options = ["Work harder#{punctuation.sample}", "Drive to the bookstore", "Go to the bathroom"]
-    # present_options("Work harder#{punctuation.sample}", "Drive to the bookstore", "Go to the bathroom")
-    give_options(options)
-    choice = get_choice
+    choices = ["Work harder#{punctuation.sample}", "Drive to the bookstore", "Go to the bathroom"]
+    present_choices(choices)
+    choice = choose
     if choice == 1
       go_to_room("arena")
     elsif choice == 2
@@ -108,13 +111,14 @@ class Bathroom
     you_are_a_writer = true unless $tool.nil? || $book.nil? || $work.nil? || $coffee.nil?
     if you_are_a_writer
       puts "#{$name}, you have won!"
-      puts "You have #{indefinite_articlerize($tool)}, #{$book}, #{indefinite_articlerize($work)}, and #{indefinite_articlerize($coffee)}!"
+      puts "You have #{indefinite_articlerize($tool)}, #{$book}, #{indefinite_articlerize($work)} you've writen, and #{indefinite_articlerize($coffee)}!"
       puts "You are now a writer!"
       exit(0)
     else
       puts "Time to get down to business."
-      present_options("Go to the café", "Go to the study", "Poop")
-      choice = $stdin.gets.chomp.to_i
+      choices = ["Go to the café", "Go to the study", "Poop"]
+      present_choices(choices)
+      choice = choose
       if choice == 1
         go_to_room("cafe")
       elsif choice == 2
@@ -130,14 +134,15 @@ class Arena
   def enter
     puts "You begin wrestling with an idea."
     puts "You need a tool."
-    present_options(tools[0], tools[1], tools[2], tools[3])
-    choice = $stdin.gets.chomp.to_i
-    $tool = tools[choice-1]
+    tools = %w(Computer Pen Eraser Pencil Notebook)
+    present_choices(tools)
+    $tool = tools[choose_minus_one].downcase
     puts "You have chosen #{indefinite_articlerize($tool)}"
     puts "...but the idea is still there."
     puts "...and you have #{$hp} hit points."
-    present_options("Battle the idea", "Go to the bookstore", "Go to the bathroom")
-    choice = $stdin.gets.chomp.to_i
+    choices = ["Battle the idea", "Go to the bookstore", "Go to the bathroom"]
+    present_choices(choices)
+    choice = choose
     if choice == 1
       battle
     elsif choice == 2

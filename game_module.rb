@@ -9,38 +9,22 @@ module WriterStuff
   end
 
   def filler
-    filler_words = %w(Hmmmm Well Er Um Huh Ok)
-    puts "#{filler_words.sample}..."
+    puts "#{%w(Hmmmm Well Er Um Huh Ok).sample}..."
   end
 
-  def present_options(one, two, three, four=nil, five=nil, six=nil)
-    puts "Select"
-    puts "1. #{one}"
-    puts "2. #{two}"
-    puts "3. #{three}"
-    puts "4. #{four}" unless four.nil?
-    puts "5. #{five}" unless five.nil?
-    puts "6. #{six}" unless six.nil?
+  def present_choices(array)
+    puts "Choose:"
+    array.each_with_index {|element,index| puts "#{index + 1}. #{element}"}
     print "> "
   end
 
-  def give_options(array)
-    puts "Select"
-    puts "1. #{array[0].capitalize}"
-    puts "2. #{array[1].capitalize}"
-    puts "3. #{array[2].capitalize}"
-    puts "4. #{array[3].capitalize}" unless array[3].nil?
-    puts "5. #{array[4].capitalize}" unless array[4].nil?
-    puts "6. #{array[5].capitalize}" unless array[5].nil?
-    print "> "
-  end
-
-  def get_choice
+  def choose
     $stdin.gets.chomp.to_i
   end
 
-  def get_choice_minus_one
-    get_choice - 1
+  def choose_minus_one
+    # allows user to select array element since select choices are shifted forward by 1
+    choose - 1
   end
 
   def get_name
@@ -48,6 +32,7 @@ module WriterStuff
     puts "What is your name?"
     print "> "
     $name = $stdin.gets.chomp
+    puts "Garsh!  That is the best name!" if $name.downcase == "ruby"
   end
 
   def book_titles
@@ -62,26 +47,16 @@ module WriterStuff
     Hash[book_authors.zip book_titles]
   end
 
-  def get_favorite_book
-    puts "Whick of these tomes do you like best?"
+  def choose_book
+    puts "Whick of these tomes do you want to carry for spiritual guidance?"
     book_array = []
     books.each do |author, title|
       book_array << "'#{title}' by #{author}"
     end
-    present_options(book_array[0], book_array[1], book_array[2], book_array[3], book_array[4], book_array[5])
-    $book = book_array[($stdin.gets.chomp.to_i - 1)]
+    present_choices(book_array)
+    $book = book_titles[choose_minus_one]
   end
 
-  def tools
-    %w(computer pen eraser pencil notebook)
-  end
-
-  def get_favorite_tool
-    puts "Ok, so you call yourself a writer, right?"
-    puts "Which of these is your favorite tool?"
-    present_options("computer", "pen", "pencil", "notebook")
-    $tool = tools[$stdin.gets.chomp.to_i - 1]
-  end
 end
 
 module Combat
@@ -91,7 +66,7 @@ module Combat
     puts "Welcome to the battle of your life."
     @idea_hp = rand(30..60)
     puts "The idea has #{@idea_hp} hit points."
-    puts "Your weapon is the #{$tool}."
+    puts "Your weapon is #{indefinite_articlerize($tool)}."
     while $hp > 0 && @idea_hp > 0
       writer_gets_hit
       $hp > 0 ? idea_gets_hit : next
@@ -105,12 +80,12 @@ module Combat
   end
 
   def post_battle
-    works = %w(novel story poem pamphlet manual editorial)
     puts "You made it out alive!"
-    $work = works[rand(0..works.length - 1)]
+    $work = %w(novel story poem pamphlet manual editorial).sample
     puts "You have written #{indefinite_articlerize($work)}."
-    present_options("Go to the bookstore", "Go to the bathroom", "Fight again")
-    choice = $stdin.gets.chomp.to_i
+    choices = %w(Go\ to\ the\ bookstore Go\ to\ the\ bathroom Fight\ again)
+    present_choices(choices)
+    choice = choose
     if choice == 1
       go_to_room("bookstore")
     elsif choice == 2
@@ -162,26 +137,3 @@ module Map
     rooms[room].enter
   end
 end
-
-# class Test
-#
-#   def initialize
-#     # variable must be included in initialize or def for
-#     # object to have access to it
-#     # & must be an instance variable
-#     # @punctuation = %w(. ! ?)
-#   end
-#
-#   def greeting(name)
-#     # but non-instance variable can be used w/in scope
-#     hello = "HELLLLLLOOOOOOO"
-#
-#
-#     puts " #{name}#{punctuation[rand(0..punctuation.length - 1)]}"
-#     # TRY WITH %s
-#     # puts format("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
-#     # puts sprintf("%s, %s%s", test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)])
-#     # puts "%s, %s%s" % [test_greeting, name, @punctuation[rand(0..@punctuation.length - 1)]]
-#     puts hello
-#   end
-# end
