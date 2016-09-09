@@ -16,6 +16,13 @@ class Play
     get_name
     $hp = rand(80..100)
     puts "OK, #{$name}..."
+    puts "There are only two ways out of this game."
+    puts "...become a writer..."
+    puts "...or die!"
+    choices = ["Become a writer", "Die"]
+    present_choices(choices)
+    choice = choose
+    die if choice == 2
     puts "You have been trying to finish a piece of writing for days..."
     puts "...but you seem to be getting nowhere."
     puts "You have #{$hp} hit points."
@@ -37,16 +44,16 @@ class BookStore
       puts "You languidly peruse the particle board stacks."
       puts "Some books on an end cap catch your eye..."
       choose_book
-      filler
+      puts filler
       puts "You like #{$book}?"
-      filler
+      puts filler
       puts "You put it in your pocket."
       puts "What do you do now?"
       action = $stdin.gets.chomp.downcase
 
       if action.include?("read")
         puts "Your can read?!?"
-        filler
+        puts filler
         puts "You drive home."
         go_to_room("study")
       else
@@ -66,13 +73,15 @@ end
 class Cafe
   def enter
     puts "Ahoy, Matey#{punctuation.sample}"
-    puts "You have entered a nautical-themed café."
+    puts "You have entered a, #{filler.downcase} 'literature'-themed café."
+    puts "You notice a poster of Ayn Rand on the wall..."
+    puts "...and hope the prices aren't too high."
     puts "Which coffee do you order?"
     coffees = %w(Espresso Cappuccino Coffee Nitro Frappuccino)
     present_choices(coffees)
     $coffee = coffees[choose_minus_one].downcase
     puts "You now have #{indefinite_articlerize($coffee)}!"
-    filler
+    puts filler
     puts "You are well on your way to being a writer#{punctuation.sample}"
     puts "Now what?"
     choices = ["Go back to the bookstore","Go to your study","Go to the bathroom"]

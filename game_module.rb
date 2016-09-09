@@ -9,7 +9,7 @@ module WriterStuff
   end
 
   def filler
-    puts "#{%w(Hmmmm Well Er Um Huh Ok).sample}..."
+    "#{%w(Hmmmm Well Er Um Huh Ok).sample}..."
   end
 
   def present_choices(array)
@@ -57,6 +57,12 @@ module WriterStuff
     $book = book_titles[choose_minus_one]
   end
 
+  def die
+    puts "You spiral into a depression..."
+    puts "...and die :("
+    exit(0)
+  end
+
 end
 
 module Combat
@@ -74,8 +80,7 @@ module Combat
     if @idea_dies
       post_battle
     else
-      puts "You spiral into a depression..."
-      puts "...and die :("
+      die
     end
   end
 
